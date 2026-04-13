@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { PageShell } from "@/components/page-shell";
 import { SurfaceCard } from "@/components/ui";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
-import type { Database } from "@/lib/supabase/types";
 
 // ─── Intro steps ────────────────────────────────────────────────────────────
 const INTRO_STEPS = [
@@ -92,13 +91,11 @@ function UsernameModal({
     setSaving(true);
     setError("");
     try {
-      const client = getSupabaseBrowserClient();
-      const payload: Database["public"]["Tables"]["users"]["Update"] = {
-        display_name: trimmed,
-      };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const client = getSupabaseBrowserClient() as any;
       const { error: dbError } = await client
         .from("users")
-        .update(payload)
+        .update({ display_name: trimmed })
         .eq("privy_user_id", privyUserId);
       if (dbError) throw dbError;
       onDone();
