@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { usePrivy } from "@privy-io/react-auth";
-import { RarityBadge, SurfaceCard } from "@/components/ui";
+import { ElementBadge, RarityBadge, SurfaceCard } from "@/components/ui";
 import { POKEMON_ROSTER } from "@/data/mock/pokemon";
 import { getPokemonSpritePath } from "@/lib/pokemon/sprites";
 import { getPrivyAuthContext } from "@/lib/privy/sync-user";
@@ -46,7 +46,7 @@ export function CollectionPageClient() {
   if (!ready) {
     return (
       <SurfaceCard>
-        <p className="text-sm text-slate-600">Checking authentication...</p>
+        <p className="text-base text-slate-600 sm:text-sm">Checking authentication...</p>
       </SurfaceCard>
     );
   }
@@ -54,7 +54,7 @@ export function CollectionPageClient() {
   if (!authenticated) {
     return (
       <SurfaceCard>
-        <p className="text-sm text-slate-600">Please login to view your collection.</p>
+        <p className="text-base text-slate-600 sm:text-sm">Please login to view your collection.</p>
       </SurfaceCard>
     );
   }
@@ -62,26 +62,26 @@ export function CollectionPageClient() {
   if (!hasUser) {
     return (
       <SurfaceCard>
-        <p className="text-sm text-rose-700">Current mock user not found.</p>
+        <p className="text-base text-rose-700 sm:text-sm">Current mock user not found.</p>
       </SurfaceCard>
     );
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4 sm:space-y-3">
       <SurfaceCard>
-        <p className="text-sm text-slate-700">
+        <p className="text-base text-slate-700 sm:text-sm">
           Unlocked: <span className="font-semibold">{totalUnlocked}</span> /{" "}
           {POKEMON_ROSTER.length}
         </p>
         {totalUnlocked === 0 ? (
-          <p className="mt-2 text-xs text-slate-500">
+          <p className="mt-2 text-sm text-slate-500 sm:text-xs">
             No Pokemon yet. Start by picking your starter, then open balls from Home.
           </p>
         ) : null}
       </SurfaceCard>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {POKEMON_ROSTER.map((pokemon) => {
           const isUnlocked = unlockedPokemonIds.includes(pokemon.id);
           const spritePath = getPokemonSpritePath(pokemon.id);
@@ -94,25 +94,30 @@ export function CollectionPageClient() {
             >
               <div className="mb-2 flex items-center justify-between">
                 <RarityBadge rarity={pokemon.rarity} />
-                <span className="text-xs text-slate-500">Power {pokemon.power}</span>
+                <span className="text-sm text-slate-500 sm:text-xs">Power {pokemon.power}</span>
               </div>
               <div className="mb-2 flex justify-center">
                 {spritePath ? (
                   <Image
                     src={spritePath}
                     alt={pokemon.name}
-                    width={72}
-                    height={72}
-                    className={`h-[72px] w-[72px] object-contain ${isUnlocked ? "" : "opacity-25 grayscale"}`}
+                    width={84}
+                    height={84}
+                    unoptimized
+                    className={`h-[84px] w-[84px] object-contain ${isUnlocked ? "" : "opacity-25 grayscale"}`}
                   />
                 ) : (
-                  <div className="h-[72px] w-[72px] border border-slate-300 bg-white/40" />
+                  <div className="h-[84px] w-[84px] border border-slate-300 bg-white/40" />
                 )}
               </div>
               <h2 className="font-semibold text-slate-900">{isUnlocked ? pokemon.name : "Locked Pokemon"}</h2>
-              <p className="text-xs text-slate-500">
-                {isUnlocked ? `Type: ${pokemon.element}` : "Open balls to unlock"}
-              </p>
+              {isUnlocked ? (
+                <div className="mt-1">
+                  <ElementBadge element={pokemon.element} />
+                </div>
+              ) : (
+                <p className="text-sm text-slate-500 sm:text-xs">Open balls to unlock</p>
+              )}
             </article>
           );
         })}

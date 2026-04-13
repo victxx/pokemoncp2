@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
-import { ActionLink, StatTile, SurfaceCard } from "@/components/ui";
+import { ActionLink, ElementBadge, StatTile, SurfaceCard } from "@/components/ui";
 import { PullResultCard } from "@/components/home/pull-result-card";
 import { STARTERS } from "@/data/mock/starters";
 import { DAILY_BATTLE_TICKETS, DEFAULT_PULL_COST_COINS } from "@/lib/config/game";
@@ -67,7 +67,7 @@ export function HomePageClient() {
   if (!ready) {
     return (
       <SurfaceCard>
-        <p className="text-sm text-slate-600">Checking authentication...</p>
+        <p className="text-base text-slate-600 sm:text-sm">Checking authentication...</p>
       </SurfaceCard>
     );
   }
@@ -75,7 +75,7 @@ export function HomePageClient() {
   if (!authenticated) {
     return (
       <SurfaceCard>
-        <p className="text-sm text-slate-600">Please login to view your home.</p>
+        <p className="text-base text-slate-600 sm:text-sm">Please login to view your home.</p>
       </SurfaceCard>
     );
   }
@@ -105,15 +105,18 @@ export function HomePageClient() {
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4 sm:space-y-3">
       <SurfaceCard>
-        <p className="text-xs uppercase tracking-wide text-slate-500">Trainer</p>
+        <p className="text-sm uppercase tracking-wide text-slate-500 sm:text-xs">Trainer</p>
         <h2 className="text-xl font-bold text-slate-900">{currentUser.displayName}</h2>
-        <p className="mt-1 text-sm text-slate-600">
-          Starter: {selectedStarter?.name ?? "Not selected"} {selectedStarter ? `(${selectedStarter.element})` : ""}
-        </p>
+        <p className="mt-1 text-base text-slate-600 sm:text-sm">Starter: {selectedStarter?.name ?? "Not selected"}</p>
+        {selectedStarter ? (
+          <div className="mt-2">
+            <ElementBadge element={selectedStarter.element} />
+          </div>
+        ) : null}
         {!selectedStarter ? (
-          <p className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800 ring-1 ring-amber-200">
+          <p className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800 ring-1 ring-amber-200 sm:text-xs">
             No starter selected yet. Go to Starter Selection to begin.
           </p>
         ) : null}
@@ -127,9 +130,9 @@ export function HomePageClient() {
       </div>
 
       <SurfaceCard>
-        <p className="text-xs uppercase tracking-wide text-slate-500">What to do next</p>
-        <p className="mt-1 text-sm text-slate-700">{nextStepText}</p>
-        <p className="mt-2 text-xs text-slate-500">
+        <p className="text-sm uppercase tracking-wide text-slate-500 sm:text-xs">What to do next</p>
+        <p className="mt-1 text-base text-slate-700 sm:text-sm">{nextStepText}</p>
+        <p className="mt-2 text-sm text-slate-500 sm:text-xs">
           Tickets and connected battle limits reset each local event day.
         </p>
       </SurfaceCard>
@@ -139,7 +142,7 @@ export function HomePageClient() {
         <button
           type="button"
           onClick={onOpenBall}
-          className="btn-pokemon text-sm w-full"
+          className="btn-pokemon w-full text-base sm:text-sm"
         >
           Open Ball ({DEFAULT_PULL_COST_COINS})
         </button>

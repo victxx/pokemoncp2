@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import type { Starter, StarterId } from "@/lib/types/domain";
-import { SurfaceCard } from "@/components/ui";
+import { ElementBadge, SurfaceCard } from "@/components/ui";
 
 interface StarterPickerProps {
   starters: Starter[];
@@ -13,9 +13,9 @@ interface StarterPickerProps {
 }
 
 const STARTER_SPRITES: Record<StarterId, string> = {
-  charmander: "/starters/charmander.png",
-  piplup: "/starters/piplup.png",
-  treecko: "/starters/treecko.png"
+  charmander: "/starters/charmander-v2.png",
+  piplup: "/starters/piplup-v2.png",
+  treecko: "/starters/treecko-v2.png"
 };
 
 export function StarterPicker({ starters, initialStarterId = null, isSaving = false, onConfirm }: StarterPickerProps) {
@@ -48,15 +48,17 @@ export function StarterPicker({ starters, initialStarterId = null, isSaving = fa
                     <Image
                       src={STARTER_SPRITES[starter.id]}
                       alt={starter.name}
-                      width={48}
-                      height={48}
-                      className="h-12 w-12 object-contain"
+                      width={60}
+                      height={60}
+                      unoptimized
+                      className="h-[60px] w-[60px] object-contain"
                     />
                     <div>
                       <h2 className="font-semibold">{starter.name}</h2>
-                      <p className="text-sm text-slate-600">
-                        Type: {starter.element} | Power: {starter.power}
-                      </p>
+                      <div className="mt-1 flex items-center gap-2">
+                        <ElementBadge element={starter.element} />
+                        <p className="text-sm text-slate-600 sm:text-xs">Power: {starter.power}</p>
+                      </div>
                     </div>
                   </div>
                   <span

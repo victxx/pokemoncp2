@@ -20,10 +20,10 @@ export function PullResultCard({ result, onClose }: PullResultCardProps) {
     <div className="fixed inset-0 z-30 flex items-end justify-center bg-slate-900/40 p-4 sm:items-center">
       <SurfaceCard>
         <div className="space-y-3">
-          <p className="text-xs uppercase tracking-wide text-slate-500">Pull result</p>
+          <p className="text-sm uppercase tracking-wide text-slate-500 sm:text-xs">Pull result</p>
           {spritePath ? (
             <div className="flex justify-center">
-              <Image src={spritePath} alt={pokemon.name} width={110} height={110} className="h-[110px] w-[110px] object-contain" />
+              <Image src={spritePath} alt={pokemon.name} width={128} height={128} unoptimized className="h-[128px] w-[128px] object-contain" />
             </div>
           ) : null}
           <h3 className="text-xl font-bold text-slate-900">{pokemon.name}</h3>
@@ -31,7 +31,7 @@ export function PullResultCard({ result, onClose }: PullResultCardProps) {
             <RarityBadge rarity={result.rarity} />
             <span className="text-sm text-slate-600">Power {pokemon.power}</span>
           </div>
-          <p className="text-sm text-slate-700">
+          <p className="text-base text-slate-700 sm:text-sm">
             {result.isNewUnlock
               ? `New unlock! +${result.bonusPointsAwarded} points`
               : "Duplicate Pokemon. No extra points this time."}
@@ -39,7 +39,7 @@ export function PullResultCard({ result, onClose }: PullResultCardProps) {
           <button
             type="button"
             onClick={onClose}
-            className="w-full rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white"
+            className="w-full rounded-xl bg-slate-900 px-4 py-4 text-base font-semibold text-white sm:py-3 sm:text-sm"
           >
             Continue
           </button>
