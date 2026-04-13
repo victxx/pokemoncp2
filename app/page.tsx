@@ -1,13 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
 import { PageShell } from "@/components/page-shell";
 import { SurfaceCard } from "@/components/ui";
-import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
-// ─── Intro steps ────────────────────────────────────────────────────────────
 const INTRO_STEPS = [
   {
     title: "Welcome, Trainer!",
@@ -31,14 +29,11 @@ const INTRO_STEPS = [
   },
 ];
 
-// ─── Pixel dialog wrapper ────────────────────────────────────────────────────
-function PixelDialog({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
+function IntroModal({ onFinish }: { onFinish: () => void }) {
+  const [step, setStep] = useState(0);
+  const current = INTRO_STEPS[step];
+  const isLast = step === INTRO_STEPS.length - 1;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
       <div
@@ -49,6 +44,7 @@ function PixelDialog({
           boxShadow: "inset -6px -6px 0px #a89f8c, inset 6px 6px 0px #ffffff",
         }}
       >
+        {/* Title bar */}
         <div
           style={{
             background: "#3a5fc8",
@@ -57,205 +53,83 @@ function PixelDialog({
           }}
         >
           <p className="text-sm text-white" style={{ letterSpacing: "0.05em" }}>
-            {title}
+            {current.title}
           </p>
         </div>
-        {children}
+
+        {/* Step indicator dots */}
+        <div className="flex gap-1 px-4 pt-3">
+          {INTRO_STEPS.map((_, i) => (
+            <span
+              key={i}
+              style={{
+                width: 8,
+                height: 8,
+                background: i === step ? "#e8282b" : "#a89f8c",
+                border: "2px solid #000",
+                display: "inline-block",
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Body text */}
+        <div className="px-4 py-4">
+          <p className="text-sm leading-relaxed text-slate-800">{current.body}</p>
+        </div>
+
+        {/* Buttons */}
+        <div className="flex gap-3 border-t-2 border-black px-4 py-3" style={{ borderTop: "3px solid #000" }}>
+          {step > 0 && (
+            <button
+              type="button"
+              onClick={() => setStep((s) => s - 1)}
+              className="btn-pokemon-secondary text-xs flex-1"
+            >
+              Back
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => {
+              if (isLast) {
+                onFinish();
+              } else {
+                setStep((s) => s + 1);
+              }
+            }}
+            className="btn-pokemon text-xs flex-1"
+          >
+            {isLast ? "Start!" : "Next"}
+          </button>
+        </div>
       </div>
     </div>
   );
 }
 
-// ─── Username picker modal ───────────────────────────────────────────────────
-function UsernameModal({
-  privyUserId,
-  onDone,
-}: {
-  privyUserId: string;
-  onDone: () => void;
-}) {
-  const [name, setName] = useState("");
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
+function LandingClient() {
+  const { ready, authenticated, login } = usePrivy();
+  const router = useRouter();
+  const [showIntro, setShowIntro] = useState(false);
 
-  const handleSave = async () => {
-    const trimmed = name.trim();
-    if (trimmed.length < 2) {
-      setError("Name must be at least 2 characters.");
+  const handleLogin = async () => {
+    if (authenticated) {
+      setShowIntro(true);
       return;
     }
-    if (trimmed.length > 20) {
-      setError("Name must be 20 characters or less.");
-      return;
-    }
-    setSaving(true);
-    setError("");
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const client = getSupabaseBrowserClient() as any;
-      const { error: dbError } = await client
-        .from("users")
-        .update({ display_name: trimmed })
-        .eq("privy_user_id", privyUserId);
-      if (dbError) throw dbError;
-      onDone();
-    } catch {
-      setError("Could not save name. Try again.");
-    } finally {
-      setSaving(false);
-    }
+    await login();
+    setShowIntro(true);
   };
 
-  return (
-    <PixelDialog title="Choose your Trainer name">
-      <div className="px-4 py-4 flex flex-col gap-3">
-        <p className="text-xs text-slate-700 leading-relaxed">
-          What should other trainers call you? Pick a name — you won&apos;t be able to change it later.
-        </p>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          maxLength={20}
-          placeholder="Enter trainer name..."
-          className="w-full px-3 py-2 text-sm"
-          style={{
-            border: "3px solid #000",
-            background: "#fff",
-            outline: "none",
-            boxShadow: "inset 2px 2px 0px #a89f8c",
-            fontFamily: "inherit",
-          }}
-          onKeyDown={(e) => e.key === "Enter" && handleSave()}
-        />
-        {error && (
-          <p className="text-xs" style={{ color: "#e8282b" }}>
-            {error}
-          </p>
-        )}
-      </div>
-      <div
-        className="flex px-4 py-3"
-        style={{ borderTop: "3px solid #000" }}
-      >
-        <button
-          type="button"
-          onClick={handleSave}
-          disabled={saving || name.trim().length < 2}
-          className="btn-pokemon text-xs flex-1"
-        >
-          {saving ? "Saving..." : "Confirm"}
-        </button>
-      </div>
-    </PixelDialog>
-  );
-}
-
-// ─── Intro modal ─────────────────────────────────────────────────────────────
-function IntroModal({ onFinish }: { onFinish: () => void }) {
-  const [step, setStep] = useState(0);
-  const current = INTRO_STEPS[step];
-  const isLast = step === INTRO_STEPS.length - 1;
-
-  return (
-    <PixelDialog title={current.title}>
-      {/* Step dots */}
-      <div className="flex gap-1 px-4 pt-3">
-        {INTRO_STEPS.map((_, i) => (
-          <span
-            key={i}
-            style={{
-              width: 8,
-              height: 8,
-              background: i === step ? "#e8282b" : "#a89f8c",
-              border: "2px solid #000",
-              display: "inline-block",
-            }}
-          />
-        ))}
-      </div>
-      <div className="px-4 py-4">
-        <p className="text-sm leading-relaxed text-slate-800">{current.body}</p>
-      </div>
-      <div className="flex gap-3 px-4 py-3" style={{ borderTop: "3px solid #000" }}>
-        {step > 0 && (
-          <button
-            type="button"
-            onClick={() => setStep((s) => s - 1)}
-            className="btn-pokemon-secondary text-xs flex-1"
-          >
-            Back
-          </button>
-        )}
-        <button
-          type="button"
-          onClick={() => (isLast ? onFinish() : setStep((s) => s + 1))}
-          className="btn-pokemon text-xs flex-1"
-        >
-          {isLast ? "Start!" : "Next"}
-        </button>
-      </div>
-    </PixelDialog>
-  );
-}
-
-// ─── Flow states ─────────────────────────────────────────────────────────────
-type FlowStep = "idle" | "username" | "intro";
-
-function LandingClient() {
-  const { ready, authenticated, login, user } = usePrivy();
-  const router = useRouter();
-  const [flow, setFlow] = useState<FlowStep>("idle");
-
-  // After Privy confirms authentication, decide which step to show
-  useEffect(() => {
-    if (!authenticated || !user || flow !== "idle") return;
-
-    const checkUser = async () => {
-      try {
-        const client = getSupabaseBrowserClient();
-        const { data } = await client
-          .from("users")
-          .select("display_name")
-          .eq("privy_user_id", user.id)
-          .maybeSingle();
-
-        // Show username picker if name is still the auto-generated fallback
-        const needsName =
-          !data?.display_name || data.display_name.startsWith("Trainer_");
-
-        setFlow(needsName ? "username" : "intro");
-      } catch {
-        setFlow("intro");
-      }
-    };
-
-    checkUser();
-  }, [authenticated, user, flow]);
-
-  const handleLogin = () => {
-    if (!authenticated) {
-      login();
-    }
+  const handleFinish = () => {
+    setShowIntro(false);
+    router.push("/starter");
   };
 
   return (
     <>
-      {flow === "username" && user && (
-        <UsernameModal
-          privyUserId={user.id}
-          onDone={() => setFlow("intro")}
-        />
-      )}
-      {flow === "intro" && (
-        <IntroModal
-          onFinish={() => {
-            setFlow("idle");
-            router.push("/starter");
-          }}
-        />
-      )}
-
+      {showIntro && <IntroModal onFinish={handleFinish} />}
       <PageShell
         title="Alexandroupoli Pokemon"
         subtitle="Meet coworkers, make connections, and build your Pokemon squad."
@@ -270,17 +144,16 @@ function LandingClient() {
         <button
           type="button"
           onClick={handleLogin}
-          disabled={!ready || authenticated}
+          disabled={!ready}
           className="btn-pokemon w-full text-sm"
         >
-          {!ready ? "Loading..." : authenticated ? "Logged in!" : "Log in"}
+          {!ready ? "Loading..." : "Start Adventure"}
         </button>
       </PageShell>
     </>
   );
 }
 
-// ─── Page export ─────────────────────────────────────────────────────────────
 export default function LandingPage() {
   const hasPrivy = !!process.env.NEXT_PUBLIC_PRIVY_APP_ID;
 
@@ -298,7 +171,7 @@ export default function LandingPage() {
           </p>
         </SurfaceCard>
         <button type="button" className="btn-pokemon w-full text-sm">
-          Log in
+          Start Adventure
         </button>
       </PageShell>
     );
