@@ -1,0 +1,22 @@
+export const CONNECTION_COOLDOWN_HOURS = 10;
+export const CONNECTION_REWARD_COINS = 20;
+export const CONNECTION_REWARD_POINTS = 5;
+export const STARTER_POWER = 6;
+export const DEFAULT_PULL_COST_COINS = 50;
+
+export const PULL_COMMON_RATE = 0.7;
+export const PULL_RARE_RATE = 0.25;
+export const PULL_EPIC_RATE = 0.05;
+
+export const DAILY_BATTLE_TICKETS = 5;
+export const EVENT_TIMEZONE_OFFSET_HOURS = -5;
+
+export const CONNECTED_BATTLE_PLAY_POINTS = 10;
+export const CONNECTED_BATTLE_WIN_POINTS = 25;
+export const CONNECTED_BATTLE_LOSE_POINTS = 5;
+
+export const TICKET_BATTLE_PLAY_POINTS = 5;
+export const TICKET_BATTLE_WIN_POINTS = 10;
+export const TICKET_BATTLE_LOSE_POINTS = 2;
+
+export const POKEMON_BATTLE_COOLDOWN_HOURS = 3;
