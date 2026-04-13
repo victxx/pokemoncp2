@@ -196,36 +196,42 @@ function LandingClient() {
   // - no starter + intro not done -> Intro modal
   useEffect(() => {
     const run = async () => {
-      if (!ready) {
-        return;
-      }
-      if (!authenticated || !user) {
+      try {
+        if (!ready) {
+          return;
+        }
+        if (!authenticated || !user) {
+          setCheckingRoute(false);
+          return;
+        }
+
+        const authContext = getPrivyAuthContext(user);
+        if (!authContext) {
+          setCheckingRoute(false);
+          return;
+        }
+        const client = getSupabaseBrowserClient();
+        const profile = await getCurrentUser(client, authContext);
+
+        if (profile?.starterId) {
+          router.replace("/home");
+          return;
+        }
+
+        const introDone = typeof window !== "undefined" && window.localStorage.getItem(INTRO_DONE_KEY) === "1";
+        if (introDone) {
+          router.replace("/starter");
+          return;
+        }
+
+        setShowIntro(true);
+        loginPending.current = false;
+      } catch {
+        // Fallback: never keep the user stuck in loading state.
+        setShowIntro(false);
+      } finally {
         setCheckingRoute(false);
-        return;
       }
-
-      const authContext = getPrivyAuthContext(user);
-      if (!authContext) {
-        setCheckingRoute(false);
-        return;
-      }
-      const client = getSupabaseBrowserClient();
-      const profile = await getCurrentUser(client, authContext);
-
-      if (profile?.starterId) {
-        router.replace("/home");
-        return;
-      }
-
-      const introDone = typeof window !== "undefined" && window.localStorage.getItem(INTRO_DONE_KEY) === "1";
-      if (introDone) {
-        router.replace("/starter");
-        return;
-      }
-
-      setShowIntro(true);
-      setCheckingRoute(false);
-      loginPending.current = false;
     };
 
     void run();

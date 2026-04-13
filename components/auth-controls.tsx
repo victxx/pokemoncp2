@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePrivy } from "@privy-io/react-auth";
 import { getPrivyAuthContext } from "@/lib/privy/sync-user";
@@ -50,8 +50,6 @@ function AuthControlsInner() {
 
     void run();
   }, [authenticated, ready, user]);
-
-  const compactUserId = useMemo(() => user?.id?.slice(0, 8) ?? "", [user?.id]);
 
   const onSaveName = () => {
     const run = async () => {
@@ -135,7 +133,7 @@ function AuthControlsInner() {
           onClick={() => setShowUserMenu((value) => !value)}
           className="btn-pokemon-secondary max-w-[9rem] truncate px-3 py-2 text-sm sm:text-xs"
         >
-          {displayName ? displayName : compactUserId}
+          {displayName ?? ""}
         </button>
         {showUserMenu ? (
           <div className="absolute right-0 mt-2 w-40 border-2 border-black bg-[#f5f0e8] p-2 shadow-[inset_-3px_-3px_0px_#a89f8c,inset_3px_3px_0px_#ffffff]">
