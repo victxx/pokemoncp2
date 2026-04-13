@@ -75,7 +75,7 @@ function AuthControlsInner() {
   };
 
   if (!ready) {
-    return <p className="text-xs text-slate-500">Auth loading...</p>;
+    return <p className="text-sm text-slate-500 sm:text-xs">Auth loading...</p>;
   }
 
   if (!authenticated) {
@@ -83,7 +83,7 @@ function AuthControlsInner() {
       <button
         type="button"
         onClick={login}
-        className="btn-pokemon text-xs px-3 py-1"
+        className="btn-pokemon px-3 py-2 text-sm sm:text-xs"
       >
         Login
       </button>
@@ -95,22 +95,22 @@ function AuthControlsInner() {
       {showNamePicker ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4">
           <div className="w-full max-w-sm rounded-xl bg-white p-4 ring-1 ring-slate-200">
-            <p className="text-sm font-semibold text-slate-900">Choose your trainer name</p>
-            <p className="mt-1 text-xs text-slate-500">
+            <p className="text-base font-semibold text-slate-900 sm:text-sm">Choose your trainer name</p>
+            <p className="mt-1 text-sm text-slate-500 sm:text-xs">
               This name appears on leaderboard and battle screens.
             </p>
             <input
               value={nameDraft}
               onChange={(event) => setNameDraft(event.target.value)}
               maxLength={24}
-              className="mt-3 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none ring-slate-300 focus:ring-2"
+              className="mt-3 w-full rounded-xl border border-slate-300 px-3 py-3 text-base outline-none ring-slate-300 focus:ring-2 sm:py-2 sm:text-sm"
               placeholder="Your trainer name"
             />
             <div className="mt-3 grid grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => setShowNamePicker(false)}
-                className="btn-pokemon-secondary text-xs px-3 py-2"
+                className="btn-pokemon-secondary px-3 py-2 text-sm sm:text-xs"
               >
                 Later
               </button>
@@ -118,7 +118,7 @@ function AuthControlsInner() {
                 type="button"
                 onClick={onSaveName}
                 disabled={isSavingName}
-                className="btn-pokemon text-xs px-3 py-2"
+                className="btn-pokemon px-3 py-2 text-sm sm:text-xs"
               >
                 {isSavingName ? "Saving..." : "Save Name"}
               </button>
@@ -126,19 +126,19 @@ function AuthControlsInner() {
           </div>
         </div>
       ) : null}
-      <Link href="/home" className="btn-pokemon-secondary text-xs px-3 py-1" aria-label="Home">
+      <Link href="/home" className="btn-pokemon-secondary px-3 py-2 text-sm sm:text-xs" aria-label="Home">
         Home
       </Link>
       <div className="relative">
         <button
           type="button"
           onClick={() => setShowUserMenu((value) => !value)}
-          className="btn-pokemon-secondary text-xs px-3 py-1"
+          className="btn-pokemon-secondary max-w-[9rem] truncate px-3 py-2 text-sm sm:text-xs"
         >
           {displayName ? displayName : compactUserId}
         </button>
         {showUserMenu ? (
-          <div className="absolute right-0 mt-2 w-36 border-2 border-black bg-[#f5f0e8] p-2 shadow-[inset_-3px_-3px_0px_#a89f8c,inset_3px_3px_0px_#ffffff]">
+          <div className="absolute right-0 mt-2 w-40 border-2 border-black bg-[#f5f0e8] p-2 shadow-[inset_-3px_-3px_0px_#a89f8c,inset_3px_3px_0px_#ffffff]">
             <button
               type="button"
               onClick={() => {
@@ -146,7 +146,7 @@ function AuthControlsInner() {
                 setShowNamePicker(true);
                 setShowUserMenu(false);
               }}
-              className="btn-pokemon-secondary w-full px-2 py-1 text-xs"
+              className="btn-pokemon-secondary w-full px-2 py-2 text-sm sm:text-xs"
             >
               Change Name
             </button>
@@ -156,7 +156,7 @@ function AuthControlsInner() {
                 setShowUserMenu(false);
                 logout();
               }}
-              className="btn-pokemon mt-2 w-full px-2 py-1 text-xs"
+              className="btn-pokemon mt-2 w-full px-2 py-2 text-sm sm:text-xs"
             >
               Logout
             </button>

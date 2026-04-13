@@ -1,21 +1,21 @@
 const POKEMON_SPRITES: Record<string, string> = {
-  wingull: "/pokemon/wingull.png",
-  psyduck: "/pokemon/psyduck.png",
-  marill: "/pokemon/marill.png",
-  horsea: "/pokemon/horsea.png",
-  hoppip: "/pokemon/hoppip.png",
-  geodude: "/pokemon/geodude.png",
-  sandshrew: "/pokemon/sandshrew.png",
-  staryu: "/pokemon/staryu.png",
-  lanturn: "/pokemon/lanturn.png",
-  corsola: "/pokemon/corsola.png",
-  xatu: "/pokemon/xatu.png",
-  altaria: "/pokemon/altaria.png",
-  donphan: "/pokemon/donphan.png",
-  lapras: "/pokemon/lapras.png",
-  milotic: "/pokemon/milotic.png",
-  absol: "/pokemon/absol.png",
-  togekiss: "/pokemon/togekiss.png"
+  wingull: "/pokemon/wingull-v2.png",
+  psyduck: "/pokemon/psyduck-v2.png",
+  marill: "/pokemon/marill-v2.png",
+  horsea: "/pokemon/horsea-v2.png",
+  hoppip: "/pokemon/hoppip-v2.png",
+  geodude: "/pokemon/geodude-v2.png",
+  sandshrew: "/pokemon/sandshrew-v2.png",
+  staryu: "/pokemon/staryu-v2.png",
+  lanturn: "/pokemon/lanturn-v2.png",
+  corsola: "/pokemon/corsola-v2.png",
+  xatu: "/pokemon/xatu-v2.png",
+  altaria: "/pokemon/altaria-v2.png",
+  donphan: "/pokemon/donphan-v2.png",
+  lapras: "/pokemon/lapras-v2.png",
+  milotic: "/pokemon/milotic-v2.png",
+  absol: "/pokemon/absol-v2.png",
+  togekiss: "/pokemon/togekiss-v2.png"
 };
 
 export function getPokemonSpritePath(pokemonId: string): string | null {

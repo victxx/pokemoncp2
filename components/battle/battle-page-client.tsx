@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
-import { SurfaceCard } from "@/components/ui";
+import { ElementBadge, ResourceLabel, SurfaceCard } from "@/components/ui";
 import {
   DAILY_BATTLE_TICKETS,
   EVENT_TIMEZONE_OFFSET_HOURS,
@@ -235,7 +235,7 @@ export function BattlePageClient() {
   if (!ready) {
     return (
       <SurfaceCard>
-        <p className="text-sm text-slate-600">Checking authentication...</p>
+        <p className="text-base text-slate-600 sm:text-sm">Checking authentication...</p>
       </SurfaceCard>
     );
   }
@@ -243,7 +243,7 @@ export function BattlePageClient() {
   if (!authenticated) {
     return (
       <SurfaceCard>
-        <p className="text-sm text-slate-600">Please login to battle.</p>
+        <p className="text-base text-slate-600 sm:text-sm">Please login to battle.</p>
       </SurfaceCard>
     );
   }
@@ -341,10 +341,10 @@ export function BattlePageClient() {
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4 sm:space-y-3">
       <SurfaceCard>
-        <p className="text-xs uppercase tracking-wide text-slate-500">Instant battle setup</p>
-        <p className="mt-1 text-sm text-slate-700">
+        <p className="text-sm uppercase tracking-wide text-slate-500 sm:text-xs">Instant battle setup</p>
+        <p className="mt-1 text-base text-slate-700 sm:text-sm">
           Connected mode is the main ranked flow (1 full battle per pair per event day). Ticket mode allows
           extra fights with reduced rewards. Reusing the same Pokemon has a {POKEMON_BATTLE_COOLDOWN_HOURS}h
           cooldown (unless it is your only unlocked Pokemon).
@@ -352,26 +352,26 @@ export function BattlePageClient() {
       </SurfaceCard>
 
       <SurfaceCard>
-        <p className="mb-2 text-sm font-medium text-slate-700">Resources</p>
+        <p className="mb-2 text-base font-medium text-slate-700 sm:text-sm">Resources</p>
         <div className="grid grid-cols-2 gap-2">
           <div className="rounded-xl bg-slate-50 p-3 ring-1 ring-slate-200">
-            <p className="text-xs text-slate-500">Coins</p>
+            <ResourceLabel label="Coins" className="text-sm text-slate-500 sm:text-xs" />
             <p className="text-lg font-bold text-slate-900">{currentUser.coins}</p>
           </div>
           <div className="rounded-xl bg-slate-50 p-3 ring-1 ring-slate-200">
-            <p className="text-xs text-slate-500">Tickets</p>
+            <ResourceLabel label="Tickets" className="text-sm text-slate-500 sm:text-xs" />
             <p className="text-lg font-bold text-slate-900">
               {remainingTickets} / {DAILY_BATTLE_TICKETS}
             </p>
           </div>
         </div>
-        <p className="mt-2 text-xs text-slate-500">
+        <p className="mt-2 text-sm text-slate-500 sm:text-xs">
           Daily tickets and connected-battle limits reset each local event day.
         </p>
       </SurfaceCard>
 
       <SurfaceCard>
-        <label className="mb-2 block text-sm font-medium text-slate-700" htmlFor="my-pokemon">
+        <label className="mb-2 block text-base font-medium text-slate-700 sm:text-sm" htmlFor="my-pokemon">
           Your Pokemon
         </label>
         <select
@@ -379,7 +379,7 @@ export function BattlePageClient() {
           value={selectedPokemonId}
           onChange={(event) => setSelectedPokemonId(event.target.value)}
           disabled={myPokemon.length === 0}
-          className="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"
+          className="w-full rounded-xl border border-slate-300 px-3 py-3 text-base sm:py-2 sm:text-sm"
         >
           {myPokemon.map((pokemon) => (
             <option key={pokemon.id} value={pokemon.id}>
@@ -392,22 +392,27 @@ export function BattlePageClient() {
             </option>
           ))}
         </select>
-        <p className="mt-2 text-xs text-slate-500">
+        <p className="mt-2 text-sm text-slate-500 sm:text-xs">
           {selectedPokemonStatus?.isActive
             ? "Selected Pokemon status: Active."
             : selectedPokemonStatus
               ? `Selected Pokemon status: Resting (${formatRemainingCooldown(selectedPokemonStatus.remainingMs)}).`
               : "Select a Pokemon."}
         </p>
+        {selectedPokemon ? (
+          <div className="mt-2">
+            <ElementBadge element={selectedPokemon.type} />
+          </div>
+        ) : null}
         {myPokemon.length === 0 ? (
-          <p className="mt-1 text-xs text-rose-600">
+          <p className="mt-1 text-sm text-rose-600 sm:text-xs">
             No Pokemon available yet. Pick a starter or open a ball before battling.
           </p>
         ) : null}
       </SurfaceCard>
 
       <SurfaceCard>
-        <label className="mb-2 block text-sm font-medium text-slate-700" htmlFor="opponent-user">
+        <label className="mb-2 block text-base font-medium text-slate-700 sm:text-sm" htmlFor="opponent-user">
           Opponent
         </label>
         <select
@@ -415,7 +420,7 @@ export function BattlePageClient() {
           value={selectedOpponentId}
           onChange={(event) => setSelectedOpponentId(event.target.value)}
           disabled={opponentUsers.length === 0}
-          className="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm"
+          className="w-full rounded-xl border border-slate-300 px-3 py-3 text-base sm:py-2 sm:text-sm"
         >
           {opponentUsers.map((user) => (
             <option key={user.id} value={user.id}>
@@ -426,11 +431,11 @@ export function BattlePageClient() {
         <button
           type="button"
           onClick={selectRandomOpponent}
-          className="btn-pokemon-secondary text-sm w-full mt-2"
+          className="btn-pokemon-secondary mt-2 w-full text-base sm:text-sm"
         >
           Random Opponent
         </button>
-        <p className="mt-2 text-xs text-slate-500">
+        <p className="mt-2 text-sm text-slate-500 sm:text-xs">
           {!connectedBattleStatus.isConnected
             ? "No prior connection with this player: this fight will consume 1 ticket."
             : connectedBattleStatus.alreadyUsedToday
@@ -438,21 +443,21 @@ export function BattlePageClient() {
               : "Free connected battle available today for this pair (no ticket consumed)."}
         </p>
         {opponentUsers.length === 0 ? (
-          <p className="mt-1 text-xs text-rose-600">
+          <p className="mt-1 text-sm text-rose-600 sm:text-xs">
             No opponents available right now. Ask another player to join first.
           </p>
         ) : null}
         {autoBattleMode === "ticket" && remainingTickets <= 0 ? (
-          <p className="mt-1 text-xs text-rose-600">No tickets left today.</p>
+          <p className="mt-1 text-sm text-rose-600 sm:text-xs">No tickets left today.</p>
         ) : null}
       </SurfaceCard>
 
       <SurfaceCard>
-        <p className="text-xs uppercase tracking-wide text-slate-500">Roulette preview</p>
-        <p className="mt-1 text-sm text-slate-700">
+        <p className="text-sm uppercase tracking-wide text-slate-500 sm:text-xs">Roulette preview</p>
+        <p className="mt-1 text-base text-slate-700 sm:text-sm">
           Challenger: {selectedPokemon?.pokemonName ?? "Select your Pokemon"}.
         </p>
-        <p className="mt-1 text-xs text-slate-500">
+        <p className="mt-1 text-sm text-slate-500 sm:text-xs">
           Opponent Pokemon is still selected randomly from that player&apos;s unlocked collection when the battle starts.
         </p>
       </SurfaceCard>
@@ -461,7 +466,7 @@ export function BattlePageClient() {
         type="button"
         onClick={onFightNow}
         disabled={!canStartBattle}
-        className="btn-pokemon text-sm w-full"
+        className="btn-pokemon w-full text-base sm:text-sm"
       >
         {isRolling
           ? "Rolling battle roulette..."
@@ -472,44 +477,44 @@ export function BattlePageClient() {
 
       {notice ? (
         <SurfaceCard>
-          <p className={`rounded-xl px-3 py-2 text-sm ring-1 ${noticeClass(notice.tone)}`}>{notice.message}</p>
+          <p className={`rounded-xl px-3 py-2 text-base ring-1 sm:text-sm ${noticeClass(notice.tone)}`}>{notice.message}</p>
         </SurfaceCard>
       ) : null}
       {isRolling ? (
         <SurfaceCard>
-          <p className="text-sm text-slate-700">Spinning weighted odds...</p>
+          <p className="text-base text-slate-700 sm:text-sm">Spinning weighted odds...</p>
         </SurfaceCard>
       ) : null}
       {lastReveal ? (
         <SurfaceCard>
-          <p className="text-xs uppercase tracking-wide text-slate-500">Roulette result</p>
-          <p className="mt-1 text-sm font-semibold text-slate-900">
+          <p className="text-sm uppercase tracking-wide text-slate-500 sm:text-xs">Roulette result</p>
+          <p className="mt-1 text-base font-semibold text-slate-900 sm:text-sm">
             {lastReveal.challengerPokemonName} vs {lastReveal.opponentPokemonName}
           </p>
-          <p className="mt-1 text-sm text-slate-700">
+          <p className="mt-1 text-base text-slate-700 sm:text-sm">
             Win chance: You {lastReveal.challengerWinChance}% - Opponent {lastReveal.opponentWinChance}%
           </p>
-          <p className="mt-1 text-xs text-slate-500">
+          <p className="mt-1 text-sm text-slate-500 sm:text-xs">
             Roll: {lastReveal.roll} - {lastReveal.didChallengerWin ? "Win" : "Loss"}
           </p>
         </SurfaceCard>
       ) : null}
 
       <SurfaceCard>
-        <p className="text-xs uppercase tracking-wide text-slate-500">Battle history</p>
+        <p className="text-sm uppercase tracking-wide text-slate-500 sm:text-xs">Battle history</p>
         <ul className="mt-2 space-y-2">
           {battleHistory.length === 0 ? (
-            <li className="text-sm text-slate-500">No battles yet.</li>
+            <li className="text-base text-slate-500 sm:text-sm">No battles yet.</li>
           ) : (
             battleHistory.map((entry) => (
-              <li key={entry.id} className="rounded-lg bg-slate-50 p-2 text-sm ring-1 ring-slate-200">
+              <li key={entry.id} className="rounded-lg bg-slate-50 p-3 text-base ring-1 ring-slate-200 sm:p-2 sm:text-sm">
                 <p className="font-semibold text-slate-900">
                   {entry.didWin ? "Win" : "Loss"} vs {entry.opponentName}
                 </p>
-                <p className="text-xs text-slate-600">
+                <p className="text-sm text-slate-600 sm:text-xs">
                   [{entry.mode}] {entry.myPokemonName} vs {entry.opponentPokemonName}
                 </p>
-                <p className="text-xs text-slate-500">
+                <p className="text-sm text-slate-500 sm:text-xs">
                   +{entry.pointsAwarded} points
                   {entry.rankedRewardApplied ? "" : " (ticket reduced rewards)"} | {entry.playedAtLabel}
                 </p>

@@ -43,7 +43,7 @@ export function LeaderboardPageClient() {
   if (!ready) {
     return (
       <SurfaceCard>
-        <p className="text-sm text-slate-600">Checking authentication...</p>
+        <p className="text-base text-slate-600 sm:text-sm">Checking authentication...</p>
       </SurfaceCard>
     );
   }
@@ -56,15 +56,15 @@ export function LeaderboardPageClient() {
           <SurfaceCard key={entry.userId}>
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="text-xs uppercase tracking-wide text-slate-500">Rank #{index + 1}</p>
-                <h2 className="text-lg font-bold text-slate-900">
+                <p className="text-sm uppercase tracking-wide text-slate-500 sm:text-xs">Rank #{index + 1}</p>
+                <h2 className="text-xl font-bold text-slate-900 sm:text-lg">
                   {entry.displayName} {isCurrentPlayer ? "• You" : ""}
                 </h2>
-                <p className="text-sm text-slate-600">Points: {entry.points}</p>
-                <p className="text-sm text-slate-600">Connections: {entry.totalConnections}</p>
+                <p className="text-base text-slate-600 sm:text-sm">Points: {entry.points}</p>
+                <p className="text-base text-slate-600 sm:text-sm">Connections: {entry.totalConnections}</p>
               </div>
               <span
-                className={`rounded-full px-2 py-1 text-xs font-semibold ${
+                className={`rounded-full px-2 py-1 text-sm font-semibold sm:text-xs ${
                   isCurrentPlayer ? "bg-amber-100 text-amber-800" : "bg-slate-100 text-slate-600"
                 }`}
               >
