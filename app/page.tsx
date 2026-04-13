@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePrivy } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
 import { PageShell } from "@/components/page-shell";
@@ -112,14 +112,24 @@ function LandingClient() {
   const { ready, authenticated, login } = usePrivy();
   const router = useRouter();
   const [showIntro, setShowIntro] = useState(false);
+  // Track whether the user clicked login so we only show intro after *they* logged in
+  const loginPending = useRef(false);
 
-  const handleLogin = async () => {
+  // When Privy finishes the login flow and authenticated becomes true, show intro
+  useEffect(() => {
+    if (authenticated && loginPending.current) {
+      loginPending.current = false;
+      setShowIntro(true);
+    }
+  }, [authenticated]);
+
+  const handleLogin = () => {
     if (authenticated) {
       setShowIntro(true);
       return;
     }
-    await login();
-    setShowIntro(true);
+    loginPending.current = true;
+    login();
   };
 
   const handleFinish = () => {
