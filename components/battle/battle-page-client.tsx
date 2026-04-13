@@ -249,11 +249,7 @@ export function BattlePageClient() {
   }
 
   if (!currentUser) {
-    return (
-      <SurfaceCard>
-        <p className="text-sm text-rose-700">Unable to load your profile.</p>
-      </SurfaceCard>
-    );
+    return null;
   }
 
   const canStartBattle =
@@ -430,7 +426,7 @@ export function BattlePageClient() {
         <button
           type="button"
           onClick={selectRandomOpponent}
-          className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700"
+          className="btn-pokemon-secondary text-sm w-full mt-2"
         >
           Random Opponent
         </button>
@@ -465,7 +461,7 @@ export function BattlePageClient() {
         type="button"
         onClick={onFightNow}
         disabled={!canStartBattle}
-        className="w-full rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-300"
+        className="btn-pokemon text-sm w-full"
       >
         {isRolling
           ? "Rolling battle roulette..."

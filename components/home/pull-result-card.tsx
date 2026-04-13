@@ -1,5 +1,7 @@
+import Image from "next/image";
 import { RarityBadge, SurfaceCard } from "@/components/ui";
 import { POKEMON_ROSTER } from "@/data/mock/pokemon";
+import { getPokemonSpritePath } from "@/lib/pokemon/sprites";
 import type { PullResult } from "@/lib/types/domain";
 
 interface PullResultCardProps {
@@ -9,6 +11,7 @@ interface PullResultCardProps {
 
 export function PullResultCard({ result, onClose }: PullResultCardProps) {
   const pokemon = POKEMON_ROSTER.find((item) => item.id === result.pokemonId);
+  const spritePath = pokemon ? getPokemonSpritePath(pokemon.id) : null;
   if (!pokemon) {
     return null;
   }
@@ -18,6 +21,11 @@ export function PullResultCard({ result, onClose }: PullResultCardProps) {
       <SurfaceCard>
         <div className="space-y-3">
           <p className="text-xs uppercase tracking-wide text-slate-500">Pull result</p>
+          {spritePath ? (
+            <div className="flex justify-center">
+              <Image src={spritePath} alt={pokemon.name} width={110} height={110} className="h-[110px] w-[110px] object-contain" />
+            </div>
+          ) : null}
           <h3 className="text-xl font-bold text-slate-900">{pokemon.name}</h3>
           <div className="flex items-center gap-2">
             <RarityBadge rarity={result.rarity} />

@@ -3,14 +3,14 @@ import "./globals.css";
 import { Providers } from "@/components/providers";
 
 export const metadata: Metadata = {
-  title: "PokemonCP2 MVP",
-  description: "Phase 1 scaffold for off-site event game."
+  title: "Alexandroupoli Pokemon",
+  description: "Pick your starter, connect with coworkers, and race up the leaderboard."
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>
+      <body style={{ fontFamily: "'PokemonFont', sans-serif" }}>
         <Providers>{children}</Providers>
       </body>
     </html>

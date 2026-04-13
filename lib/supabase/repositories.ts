@@ -257,6 +257,11 @@ export async function updateUserPointsAndCoins(
   return !updateError;
 }
 
+export async function updateUserDisplayName(client: DBClient, userId: string, displayName: string): Promise<boolean> {
+  const { error } = await client.from("users").update({ display_name: displayName }).eq("id", userId);
+  return !error;
+}
+
 export async function getRemainingDailyTickets(client: DBClient, userId: string): Promise<number> {
   const { data } = await client.from("users").select("daily_tickets").eq("id", userId).maybeSingle();
   const row = data as Pick<UserRow, "daily_tickets"> | null;
