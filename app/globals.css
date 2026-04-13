@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+@source "../components/**/*.{ts,tsx}";
+@source "../lib/**/*.{ts,tsx}";
+
 @font-face {
   font-family: 'PokemonFont';
   src: url('/fonts/pokemon-font.woff2') format('woff2');
@@ -8,7 +11,7 @@
   font-display: swap;
 }
 
-@theme inline {
+@theme {
   --font-sans: 'PokemonFont', sans-serif;
 }
 
