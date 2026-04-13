@@ -30,6 +30,16 @@ body {
   min-height: 100vh;
 }
 
+.pixel-card {
+  background: #f5f0e8;
+  border: 3px solid #000;
+  border-radius: 0;
+  box-shadow:
+    inset -4px -4px 0px #a89f8c,
+    inset 4px 4px 0px #ffffff;
+  padding: 14px;
+}
+
 /* ── Pokemon Fire Red pixel button ───────────────────────── */
 .btn-pokemon {
   display: inline-flex;

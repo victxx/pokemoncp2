@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { usePrivy } from "@privy-io/react-auth";
 import { RarityBadge, SurfaceCard } from "@/components/ui";
 import { POKEMON_ROSTER } from "@/data/mock/pokemon";
+import { getPokemonSpritePath } from "@/lib/pokemon/sprites";
 import { getPrivyAuthContext } from "@/lib/privy/sync-user";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { getCurrentUser, getUserPokemon, type UserPokemonRecord } from "@/lib/supabase/repositories";
@@ -82,6 +84,7 @@ export function CollectionPageClient() {
       <div className="grid grid-cols-2 gap-3">
         {POKEMON_ROSTER.map((pokemon) => {
           const isUnlocked = unlockedPokemonIds.includes(pokemon.id);
+          const spritePath = getPokemonSpritePath(pokemon.id);
           return (
             <article
               key={pokemon.id}
@@ -92,6 +95,19 @@ export function CollectionPageClient() {
               <div className="mb-2 flex items-center justify-between">
                 <RarityBadge rarity={pokemon.rarity} />
                 <span className="text-xs text-slate-500">Power {pokemon.power}</span>
+              </div>
+              <div className="mb-2 flex justify-center">
+                {spritePath ? (
+                  <Image
+                    src={spritePath}
+                    alt={pokemon.name}
+                    width={72}
+                    height={72}
+                    className={`h-[72px] w-[72px] object-contain ${isUnlocked ? "" : "opacity-25 grayscale"}`}
+                  />
+                ) : (
+                  <div className="h-[72px] w-[72px] border border-slate-300 bg-white/40" />
+                )}
               </div>
               <h2 className="font-semibold text-slate-900">{isUnlocked ? pokemon.name : "Locked Pokemon"}</h2>
               <p className="text-xs text-slate-500">

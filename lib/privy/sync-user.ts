@@ -45,7 +45,9 @@ export async function getOrCreateSupabaseUserFromPrivy(
     if (auth.walletAddress && !existingUser.wallet_address) {
       updates.wallet_address = auth.walletAddress;
     }
-    if (auth.displayName && existingUser.display_name !== auth.displayName) {
+    const shouldBackfillDisplayName =
+      !existingUser.display_name || existingUser.display_name.startsWith("Trainer_");
+    if (auth.displayName && shouldBackfillDisplayName) {
       updates.display_name = sanitizeName(auth.displayName);
     }
     if (Object.keys(updates).length > 0) {

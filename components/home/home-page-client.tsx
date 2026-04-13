@@ -81,11 +81,7 @@ export function HomePageClient() {
   }
 
   if (!currentUser) {
-    return (
-      <SurfaceCard>
-        <p className="text-sm text-rose-700">Unable to load your profile.</p>
-      </SurfaceCard>
-    );
+    return null;
   }
 
   const onOpenBall = () => {

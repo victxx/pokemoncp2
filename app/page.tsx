@@ -5,6 +5,11 @@ import { usePrivy } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
 import { PageShell } from "@/components/page-shell";
 import { SurfaceCard } from "@/components/ui";
+import { getPrivyAuthContext } from "@/lib/privy/sync-user";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import { getCurrentUser } from "@/lib/supabase/repositories";
+
+const INTRO_DONE_KEY = "pokemoncp2_intro_done";
 
 const INTRO_STEPS = [
   {
@@ -25,7 +30,7 @@ const INTRO_STEPS = [
   },
   {
     title: "Pick your Starter",
-    body: "Every trainer needs a starter Pokemon. Head to Starter Selection and choose Bulbasaur, Charmander, or Squirtle. Your journey truly begins there. Good luck!",
+    body: "Every trainer needs a starter Pokemon. Head to Starter Selection and choose Charmander, Piplup, or Treecko. Your journey truly begins there. Good luck!",
   },
 ];
 
@@ -109,17 +114,68 @@ function IntroModal({ onFinish }: { onFinish: () => void }) {
 }
 
 function LandingClient() {
-  const { ready, authenticated, login } = usePrivy();
+  const { ready, authenticated, user, login } = usePrivy();
   const router = useRouter();
   const [showIntro, setShowIntro] = useState(false);
+  const [checkingRoute, setCheckingRoute] = useState(true);
+  const [hasSeenIntro, setHasSeenIntro] = useState(false);
   // Track whether the user clicked login so we only show intro after *they* logged in
   const loginPending = useRef(false);
 
-  // When Privy finishes the login flow and authenticated becomes true, show intro
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    setHasSeenIntro(window.localStorage.getItem(INTRO_DONE_KEY) === "1");
+  }, []);
+
+  // Route authenticated users automatically:
+  // - returning + starter -> Home
+  // - no starter + intro done -> Starter
+  // - no starter + intro not done -> Intro modal
+  useEffect(() => {
+    const run = async () => {
+      if (!ready) {
+        return;
+      }
+      if (!authenticated || !user) {
+        setCheckingRoute(false);
+        return;
+      }
+
+      const authContext = getPrivyAuthContext(user);
+      if (!authContext) {
+        setCheckingRoute(false);
+        return;
+      }
+      const client = getSupabaseBrowserClient();
+      const profile = await getCurrentUser(client, authContext);
+
+      if (profile?.starterId) {
+        router.replace("/home");
+        return;
+      }
+
+      const introDone = typeof window !== "undefined" && window.localStorage.getItem(INTRO_DONE_KEY) === "1";
+      if (introDone) {
+        router.replace("/starter");
+        return;
+      }
+
+      setShowIntro(true);
+      setCheckingRoute(false);
+      loginPending.current = false;
+    };
+
+    void run();
+  }, [authenticated, ready, router, user]);
+
+  // When Privy finishes user-triggered login, show intro for first-time flow
   useEffect(() => {
     if (authenticated && loginPending.current) {
       loginPending.current = false;
       setShowIntro(true);
+      setCheckingRoute(false);
     }
   }, [authenticated]);
 
@@ -134,8 +190,21 @@ function LandingClient() {
 
   const handleFinish = () => {
     setShowIntro(false);
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(INTRO_DONE_KEY, "1");
+    }
     router.push("/starter");
   };
+
+  if (checkingRoute) {
+    return (
+      <PageShell title="Alexandroupoli Pokemon" subtitle="Preparing your adventure...">
+        <SurfaceCard>
+          <p className="text-sm text-slate-700">Loading trainer state...</p>
+        </SurfaceCard>
+      </PageShell>
+    );
+  }
 
   return (
     <>
@@ -143,7 +212,6 @@ function LandingClient() {
       <PageShell
         title="Alexandroupoli Pokemon"
         subtitle="Meet coworkers, make connections, and build your Pokemon squad."
-        hideNav
       >
         <SurfaceCard>
           <p className="text-sm text-slate-700">
@@ -157,7 +225,7 @@ function LandingClient() {
           disabled={!ready}
           className="btn-pokemon w-full text-sm"
         >
-          {!ready ? "Loading..." : "Start Adventure"}
+          {!ready ? "Loading..." : hasSeenIntro ? "Continue Adventure" : "Start Adventure"}
         </button>
       </PageShell>
     </>
@@ -172,7 +240,6 @@ export default function LandingPage() {
       <PageShell
         title="Alexandroupoli Pokemon"
         subtitle="Meet coworkers, make connections, and build your Pokemon squad."
-        hideNav
       >
         <SurfaceCard>
           <p className="text-sm text-slate-700">
