@@ -2,7 +2,7 @@
 
 import { usePrivy } from "@privy-io/react-auth";
 
-export function AuthControls() {
+function AuthControlsInner() {
   const { ready, authenticated, user, login, logout } = usePrivy();
 
   if (!ready) {
@@ -33,4 +33,10 @@ export function AuthControls() {
       </button>
     </div>
   );
+}
+
+export function AuthControls() {
+  const hasPrivy = !!process.env.NEXT_PUBLIC_PRIVY_APP_ID;
+  if (!hasPrivy) return null;
+  return <AuthControlsInner />;
 }
