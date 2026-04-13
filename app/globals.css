@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'PokemonFont';
+  src: url('/fonts/pokemon-font.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme inline {
+  --font-sans: 'PokemonFont', sans-serif;
+}
+
 :root {
   color-scheme: light;
 }
@@ -8,4 +20,5 @@ body {
   background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
   color: #0f172a;
   min-height: 100vh;
+  font-family: 'PokemonFont', sans-serif;
 }
