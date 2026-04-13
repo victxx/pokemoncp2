@@ -143,7 +143,7 @@ export function HomePageClient() {
         <button
           type="button"
           onClick={onOpenBall}
-          className="rounded-xl bg-slate-900 px-4 py-3 text-center text-sm font-semibold text-white"
+          className="btn-pokemon text-sm w-full"
         >
           Open Ball ({DEFAULT_PULL_COST_COINS})
         </button>

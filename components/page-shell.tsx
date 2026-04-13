@@ -26,7 +26,7 @@ export function PageShell({ title, subtitle, children, hideNav = false }: PageSh
             <Link
               key={route.path}
               href={route.path}
-              className="whitespace-nowrap rounded-full bg-white px-3 py-1 text-xs font-medium shadow-sm ring-1 ring-slate-200"
+              className="btn-pokemon-secondary whitespace-nowrap text-xs px-3 py-1"
             >
               {route.label}
             </Link>

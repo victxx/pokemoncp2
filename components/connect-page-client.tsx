@@ -183,7 +183,7 @@ export function ConnectPageClient() {
           />
           <button
             type="submit"
-            className="w-full rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white"
+            className="btn-pokemon text-sm w-full"
           >
             Connect
           </button>

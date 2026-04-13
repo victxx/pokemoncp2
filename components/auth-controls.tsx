@@ -14,7 +14,7 @@ function AuthControlsInner() {
       <button
         type="button"
         onClick={login}
-        className="rounded-lg bg-slate-900 px-3 py-1 text-xs font-semibold text-white"
+        className="btn-pokemon text-xs px-3 py-1"
       >
         Login
       </button>
@@ -27,7 +27,7 @@ function AuthControlsInner() {
       <button
         type="button"
         onClick={logout}
-        className="rounded-lg border border-slate-300 px-3 py-1 text-xs font-semibold text-slate-700"
+        className="btn-pokemon-secondary text-xs px-3 py-1"
       >
         Logout
       </button>

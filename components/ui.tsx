@@ -18,7 +18,7 @@ export function ActionLink({ href, label, className = "" }: { href: string; labe
   return (
     <Link
       href={href}
-      className={`rounded-xl bg-slate-900 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-slate-800 ${className}`}
+      className={`btn-pokemon text-sm font-semibold w-full ${className}`}
     >
       {label}
     </Link>

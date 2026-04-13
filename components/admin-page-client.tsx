@@ -115,7 +115,7 @@ export function AdminPageClient() {
           <button
             type="button"
             onClick={unlock}
-            className="mt-2 w-full rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white"
+            className="btn-pokemon text-sm w-full mt-2"
           >
             Unlock Admin
           </button>
@@ -160,21 +160,21 @@ export function AdminPageClient() {
                 <button
                   type="button"
                   onClick={() => void onUpdateStatus(user.id, "active")}
-                  className="rounded-lg bg-slate-200 px-2 py-1 text-xs font-semibold text-slate-800"
+                  className="btn-pokemon-secondary text-xs px-2 py-1"
                 >
                   Active
                 </button>
                 <button
                   type="button"
                   onClick={() => void onUpdateStatus(user.id, "flagged")}
-                  className="rounded-lg bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-800"
+                  className="btn-pokemon-secondary text-xs px-2 py-1"
                 >
                   Flagged
                 </button>
                 <button
                   type="button"
                   onClick={() => void onUpdateStatus(user.id, "blocked")}
-                  className="rounded-lg bg-rose-100 px-2 py-1 text-xs font-semibold text-rose-800"
+                  className="btn-pokemon-secondary text-xs px-2 py-1"
                 >
                   Blocked
                 </button>
@@ -219,7 +219,7 @@ export function AdminPageClient() {
                   <button
                     type="button"
                     onClick={() => void onInvalidateConnection(connection.id)}
-                    className="w-full rounded-lg bg-rose-600 px-3 py-2 text-xs font-semibold text-white"
+                    className="btn-pokemon text-xs w-full"
                   >
                     Invalidate Connection
                   </button>

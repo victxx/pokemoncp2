@@ -29,3 +29,81 @@ body {
   color: #0f172a;
   min-height: 100vh;
 }
+
+/* ── Pokemon Fire Red pixel button ───────────────────────── */
+.btn-pokemon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  background-color: #e8282b;
+  color: #ffffff;
+  border: 3px solid #000000;
+  border-radius: 0px;
+  box-shadow:
+    inset -4px -4px 0px #8b0000,
+    inset 4px 4px 0px #ff6666;
+  image-rendering: pixelated;
+  cursor: pointer;
+  text-align: center;
+  transition: box-shadow 0.08s, transform 0.08s;
+  letter-spacing: 0.04em;
+}
+
+.btn-pokemon:hover:not(:disabled) {
+  box-shadow:
+    inset -3px -3px 0px #8b0000,
+    inset 3px 3px 0px #ff6666;
+  filter: brightness(1.08);
+}
+
+.btn-pokemon:active:not(:disabled) {
+  box-shadow:
+    inset 4px 4px 0px #8b0000,
+    inset -4px -4px 0px #ff6666;
+  transform: translate(2px, 2px);
+}
+
+.btn-pokemon:disabled {
+  background-color: #9ca3af;
+  color: #e5e7eb;
+  box-shadow:
+    inset -4px -4px 0px #6b7280,
+    inset 4px 4px 0px #d1d5db;
+  cursor: not-allowed;
+}
+
+.btn-pokemon-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  background-color: #f5f0e8;
+  color: #1a1a1a;
+  border: 3px solid #000000;
+  border-radius: 0px;
+  box-shadow:
+    inset -4px -4px 0px #a89f8c,
+    inset 4px 4px 0px #ffffff;
+  image-rendering: pixelated;
+  cursor: pointer;
+  text-align: center;
+  transition: box-shadow 0.08s, transform 0.08s;
+  letter-spacing: 0.04em;
+}
+
+.btn-pokemon-secondary:hover:not(:disabled) {
+  filter: brightness(0.96);
+}
+
+.btn-pokemon-secondary:active:not(:disabled) {
+  box-shadow:
+    inset 4px 4px 0px #a89f8c,
+    inset -4px -4px 0px #ffffff;
+  transform: translate(2px, 2px);
+}
+
+.btn-pokemon-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

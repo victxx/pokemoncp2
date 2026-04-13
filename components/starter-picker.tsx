@@ -63,7 +63,7 @@ export function StarterPicker({ starters, initialStarterId = null, isSaving = fa
             void onConfirm(selectedStarterId);
           }
         }}
-        className="w-full rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-300"
+        className="btn-pokemon text-sm w-full"
       >
         {isSaving ? "Saving..." : "Confirm Starter"}
       </button>
