@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="font-sans">
+      <body style={{ fontFamily: "'PokemonFont', sans-serif" }}>
         <Providers>{children}</Providers>
       </body>
     </html>
