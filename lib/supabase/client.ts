@@ -3,14 +3,26 @@ import type { Database } from "@/lib/supabase/types";
 
 let browserClient: ReturnType<typeof createClient<Database>> | null = null;
 
+function isProbablySupabasePublicKey(value: string | undefined): value is string {
+  if (!value) {
+    return false;
+  }
+  return value.startsWith("sb_publishable_") || value.split(".").length === 3;
+}
+
 export function getSupabaseBrowserClient() {
   if (browserClient) {
     return browserClient;
   }
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey =
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  const anonFallbackKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const anonKey = isProbablySupabasePublicKey(publishableKey)
+    ? publishableKey
+    : isProbablySupabasePublicKey(anonFallbackKey)
+      ? anonFallbackKey
+      : undefined;
 
   if (!url || !anonKey) {
     throw new Error(

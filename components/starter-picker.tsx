@@ -86,11 +86,9 @@ export function StarterPicker({ starters, initialStarterId = null, isSaving = fa
         {isSaving ? "Saving..." : "Confirm Starter"}
       </button>
 
-      {selectedStarter ? (
-        <p className="text-center text-sm text-slate-600">Selected: {selectedStarter.name} (mock only)</p>
-      ) : (
+      {!selectedStarter ? (
         <p className="text-center text-sm text-slate-500">Pick a starter to continue.</p>
-      )}
+      ) : null}
     </div>
   );
 }
