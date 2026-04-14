@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
+import { useRouter } from "next/navigation";
 import { StarterPicker } from "@/components/starter-picker";
 import { SurfaceCard } from "@/components/ui";
 import { STARTERS } from "@/data/mock/starters";
@@ -12,6 +13,7 @@ import type { StarterId } from "@/lib/types/domain";
 
 export function StarterPageClient() {
   const { ready, authenticated, user } = usePrivy();
+  const router = useRouter();
   const [currentStarterId, setCurrentStarterId] = useState<StarterId | null>(null);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -63,7 +65,7 @@ export function StarterPageClient() {
     setIsSaving(false);
     if (ok && starterAdded) {
       setCurrentStarterId(starterId);
-      setMessage(`Starter saved: ${starterId}.`);
+      router.replace("/home");
       return;
     }
     if (ok && !starterAdded) {
